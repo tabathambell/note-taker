@@ -5,10 +5,8 @@ const path = require('path');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-var uniqid = require('uniqid');
- 
+const uniqid = require('uniqid');
 console.log(uniqid()); // -> 4n5pxq24kpiob12og9
-console.log(uniqid(), uniqid()); // -> 4n5pxq24kriob12ogd, 4n5pxq24ksiob12ogl
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
