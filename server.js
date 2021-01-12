@@ -1,23 +1,27 @@
-const apiRoutes = require('./routes/apiRoutes');
-const htmlRoutes = require('./routes/htmlRoutes');
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
-const PORT = process.env.PORT || 3001;
 const app = express();
-const uniqid = require('uniqid');
-console.log(uniqid()); // -> 4n5pxq24kpiob12og9
-// parse incoming string or array data
-app.use(express.urlencoded({ extended: true }));
-// parse incoming JSON data
-app.use(express.json());
-app.use('/api', apiRoutes);
-app.use('/', htmlRoutes);
-// lets css and javascript work on localhost
-app.use(express.static('public'));
 
-const { notes } = require('./db/db.json');
+const notes = require('./data/notes.json');
 
-app.listen(PORT, () => {
-    console.log(`API server now on port ${PORT}`);
+function filterByQuery(query, notesArray) {
+    let filteredResults = notesArray;
+    if (query.title) {
+        filteredResults = filteredResults.filter(notes => notes.title === query.title);
+    }
+    if (query.text) {
+        filteredResults = filteredResults.filter(notes => notes.text === query.text);
+    }
+    return filteredResults;
+}
+
+app.get('/api/notes', (req, res) => {
+    let results = notes;
+    if (req.query) {
+        results = filterByQuery(req.query, results);
+    }
+    res.json(results);
+});
+
+app.listen(3001, () => {
+    console.log('API server now on port 3001!');
 });
