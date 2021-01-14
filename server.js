@@ -50,7 +50,7 @@ function validateNote(note) {
 }
 
 app.get('/api/notes', (req, res) => {
-    let results = notes;
+    let results = notes.notes;
     if (req.query) {
         results = filterByQuery(req.query, results);
     }
@@ -71,7 +71,7 @@ app.post('/api/notes', (req, res) => {
     if (!validateNote(req.body)) {
         res.status(400).send('The note is not properly formatted.')
     } else {
-    const note = createNewNote(req.body, notes)
+    const note = createNewNote(req.body, notes.notes)
     res.json(note);
     }
 });
