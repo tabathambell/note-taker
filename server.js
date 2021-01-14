@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.static('public'));
 const { v4: uuidv4, validate } = require('uuid');
 
-const notes = require('./data/notes.json');
+const { notes } = require('./data/notes.json');
 
 function filterByQuery(query, notesArray) {
     let filteredResults = notesArray;
@@ -36,6 +36,13 @@ function createNewNote(body, notesArray) {
     return note;
 }
 
+function deleteNote(notesArray) {
+    fs.writeFileSync(
+        path.join(__dirname, './data/notes.json'),
+        JSON.stringify({ notes: notesArray }, null, 2)
+    );
+}
+
 function validateNote(note) {
     if (!note.title || typeof note.title !== 'string') {
         return false;
@@ -50,7 +57,7 @@ function validateNote(note) {
 }
 
 app.get('/api/notes', (req, res) => {
-    let results = notes.notes;
+    let results = notes;
     if (req.query) {
         results = filterByQuery(req.query, results);
     }
@@ -66,12 +73,23 @@ app.get('/api/notes/:id', (req, res) => {
     }
   });
 
+app.delete('/api/notes/:id', (req, res) => {
+    const result = notes.filter(note => note.id === req.params.id)[0];
+    const index = notes.indexOf(result);
+    notes.splice(index, 1);
+    
+    deleteNote(notes);
+    console.log("Note deleted.");
+
+    res.json();
+});
+
 app.post('/api/notes', (req, res) => {
     req.body.id = uuidv4();
     if (!validateNote(req.body)) {
         res.status(400).send('The note is not properly formatted.')
     } else {
-    const note = createNewNote(req.body, notes.notes)
+    const note = createNewNote(req.body, notes)
     res.json(note);
     }
 });
