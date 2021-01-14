@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 const { v4: uuidv4, validate } = require('uuid');
 
 const notes = require('./data/notes.json');
@@ -74,6 +75,14 @@ app.post('/api/notes', (req, res) => {
     res.json(note);
     }
 });
+
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/notes.html'));
+  });
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+  });
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
