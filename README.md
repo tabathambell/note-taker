@@ -19,4 +19,4 @@ The delete buttons were created and ended up working by using the delete functio
 [Link to Page](https://tmb-note-taker.herokuapp.com/)
 
 ## Link to Github Repository
-[Link to Page](https://github.com/tabathambell/note-taker)
+[Link to Page](https://github.com/tabathambell/note-taker/)
