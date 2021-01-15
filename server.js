@@ -5,8 +5,6 @@ const path = require('path');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const { notes } = require('../../data/notes');
-const { v4: uuidv4, validate } = require('uuid');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
